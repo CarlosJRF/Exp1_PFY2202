@@ -1,0 +1,125 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f4f6f4;
+  color: #222;
+}
+
+.cabecera {
+  background: #2e7d32;
+  color: white;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.cabecera h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Espacio inferior para que el menú fijo no tape el contenido */
+.contenido {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 16px 90px;
+}
+
+.menu-inferior {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  border-top: 1px solid #ccc;
+}
+
+.menu-inferior a {
+  flex: 1;
+  padding: 16px 8px;
+  text-align: center;
+  text-decoration: none;
+  color: #555;
+}
+
+/* NavLink agrega la clase "active" a la ruta actual */
+.menu-inferior a.active {
+  color: #2e7d32;
+  font-weight: bold;
+  border-top: 3px solid #2e7d32;
+}
+
+.formulario {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.formulario.columna {
+  flex-direction: column;
+  max-width: 400px;
+}
+
+input,
+textarea {
+  padding: 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font: inherit;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background: #2e7d32;
+  color: white;
+  cursor: pointer;
+}
+
+button.eliminar {
+  background: #c62828;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.tabla th,
+.tabla td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.acciones {
+  display: flex;
+  gap: 4px;
+}
+
+.stock-bajo {
+  background: #fff3cd;
+}
+
+.nota {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.datos-contacto {
+  list-style: none;
+  padding: 0;
+}
+
+.exito {
+  color: #2e7d32;
+  font-weight: bold;
+}
