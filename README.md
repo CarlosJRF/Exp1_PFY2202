@@ -2,6 +2,8 @@
 
 Sitio web de gestión de inventario para un supermercado, desarrollado con **React**, **React Router**, HTML, CSS y JavaScript (Vite).
 
+🌐 **Sitio publicado:** https://carlosjrf.github.io/Exp1_PFY2202/
+
 ## Páginas
 
 - **Inicio (`/`)**: tabla de inventario donde se pueden agregar productos, ajustar stock y eliminarlos. Resalta productos con stock bajo.
@@ -17,11 +19,15 @@ npm install
 npm run dev
 ```
 
+## Despliegue
+
+El sitio se publica en GitHub Pages con el workflow `.github/workflows/deploy.yml`, que se ejecuta con cada push a `main`.
+
 ## Estructura
 
 ```
 src/
-├── main.jsx                  # Monta la app dentro de BrowserRouter
+├── main.jsx                  # Monta la app dentro de BrowserRouter (con basename)
 ├── App.jsx                   # Define las rutas
 ├── index.css                 # Estilos
 ├── components/
