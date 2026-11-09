@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import FormularioProducto from '../components/FormularioProducto.jsx'
 import useInventario from '../hooks/useInventario.js'
 

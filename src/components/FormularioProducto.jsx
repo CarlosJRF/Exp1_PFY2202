@@ -1,57 +1,31 @@
-import { useState } from 'react'
 import CampoFormulario from './CampoFormulario.jsx'
+import useFormulario from '../hooks/useFormulario.js'
 import { TIPOS_PRODUCTO } from '../data/productos.js'
+import { validarProducto } from '../utils/validaciones.js'
 
 const formularioVacio = { nombre: '', marca: '', tipo: '', stock: '' }
 
-function validar(datos) {
-  const errores = {}
-  if (!datos.nombre.trim()) errores.nombre = 'Ingresa el nombre del artículo.'
-  if (!datos.marca.trim()) errores.marca = 'Ingresa la marca.'
-  if (!datos.tipo) errores.tipo = 'Selecciona un tipo de producto.'
-
-  const stock = Number(datos.stock)
-  if (datos.stock === '') errores.stock = 'Ingresa el stock.'
-  else if (!Number.isInteger(stock) || stock < 0) {
-    errores.stock = 'El stock debe ser un número entero mayor o igual a 0.'
-  }
-  return errores
-}
-
-// Formulario controlado: cada campo toma su valor del estado "datos"
 function FormularioProducto({ onAgregar, onEditar }) {
-  const [datos, setDatos] = useState(formularioVacio)
-  const [errores, setErrores] = useState({})
+  const { valores, errores, cambiar, enviar } = useFormulario(formularioVacio, validarProducto, {
+    alCambiar: onEditar,
+  })
 
-  const cambiar = (e) => {
-    const { name, value } = e.target
-    setDatos({ ...datos, [name]: value })
-    setErrores({ ...errores, [name]: undefined })
-    onEditar?.()
-  }
-
-  const enviar = (e) => {
-    e.preventDefault()
-    const nuevosErrores = validar(datos)
-    setErrores(nuevosErrores)
-    if (Object.keys(nuevosErrores).length > 0) return
-
+  const agregar = (datos) =>
     onAgregar({
       nombre: datos.nombre.trim(),
       marca: datos.marca.trim(),
       tipo: datos.tipo,
       stock: Number(datos.stock),
     })
-    setDatos(formularioVacio)
-  }
 
   return (
-    <form noValidate onSubmit={enviar} className="tarjeta grid gap-4 sm:grid-cols-2">
+    <form noValidate onSubmit={enviar(agregar)} className="tarjeta grid gap-4 sm:grid-cols-2">
       <CampoFormulario
         etiqueta="Nombre"
         id="nombre"
         name="nombre"
-        value={datos.nombre}
+        maxLength={60}
+        value={valores.nombre}
         onChange={cambiar}
         error={errores.nombre}
       />
@@ -59,12 +33,13 @@ function FormularioProducto({ onAgregar, onEditar }) {
         etiqueta="Marca"
         id="marca"
         name="marca"
-        value={datos.marca}
+        maxLength={40}
+        value={valores.marca}
         onChange={cambiar}
         error={errores.marca}
       />
       <CampoFormulario etiqueta="Tipo de producto" id="tipo" error={errores.tipo}>
-        <select id="tipo" name="tipo" className="campo" value={datos.tipo} onChange={cambiar}>
+        <select id="tipo" name="tipo" className="campo" value={valores.tipo} onChange={cambiar}>
           <option value="">Selecciona…</option>
           {TIPOS_PRODUCTO.map((tipo) => (
             <option key={tipo} value={tipo}>
@@ -80,7 +55,7 @@ function FormularioProducto({ onAgregar, onEditar }) {
         type="number"
         min="0"
         step="1"
-        value={datos.stock}
+        value={valores.stock}
         onChange={cambiar}
         error={errores.stock}
       />

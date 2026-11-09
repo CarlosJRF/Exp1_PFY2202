@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 import Cabecera from './Cabecera.jsx'
 import MenuInferior from './MenuInferior.jsx'
 

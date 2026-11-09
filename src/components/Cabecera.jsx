@@ -1,4 +1,5 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router'
+import useInventario from '../hooks/useInventario.js'
 
 // NavLink entrega isActive para resaltar la página actual
 const claseEnlace = ({ isActive }) =>
@@ -7,6 +8,8 @@ const claseEnlace = ({ isActive }) =>
   }`
 
 function Cabecera() {
+  const { unidadesEnCarrito } = useInventario()
+
   return (
     <header className="bg-green-800 text-white shadow">
       <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-3">
@@ -20,6 +23,9 @@ function Cabecera() {
           </NavLink>
           <NavLink to="/agregar" className={claseEnlace}>
             Agregar artículo
+          </NavLink>
+          <NavLink to="/carrito" className={claseEnlace}>
+            Carrito ({unidadesEnCarrito})
           </NavLink>
         </nav>
       </div>

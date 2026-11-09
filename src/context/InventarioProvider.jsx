@@ -1,48 +1,38 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer } from 'react'
 import { InventarioContext } from './InventarioContext.js'
-import { productosIniciales } from '../data/productos.js'
-
-const CLAVE_STORAGE = 'superinventario.productos'
-
-// Lee el inventario guardado; si no hay (o está dañado) usa los datos iniciales
-function cargarProductos() {
-  try {
-    const guardado = localStorage.getItem(CLAVE_STORAGE)
-    return guardado ? JSON.parse(guardado) : productosIniciales
-  } catch {
-    return productosIniciales
-  }
-}
+import { inventarioReducer } from './inventarioReducer.js'
+import { cargarEstado, guardarEstado } from '../utils/almacenamiento.js'
+import { esProductoValido } from '../utils/validaciones.js'
 
 function InventarioProvider({ children }) {
-  const [productos, setProductos] = useState(cargarProductos)
+  // El tercer argumento inicializa el estado una sola vez leyendo localStorage
+  const [estado, dispatch] = useReducer(inventarioReducer, undefined, cargarEstado)
+  const { productos, carrito } = estado
 
-  // Cada vez que cambia la lista, se guarda para que sobreviva a una recarga
+  // Cada vez que cambia el estado, se guarda para que sobreviva a una recarga
   useEffect(() => {
-    try {
-      localStorage.setItem(CLAVE_STORAGE, JSON.stringify(productos))
-    } catch {
-      // Sin acceso a localStorage el inventario solo vive en memoria
-    }
-  }, [productos])
+    guardarEstado(estado)
+  }, [estado])
 
+  // Devuelve el artículo creado, o null si los datos no son válidos
   const agregarProducto = ({ nombre, marca, tipo, stock }) => {
     const nuevo = { id: crypto.randomUUID(), nombre, marca, tipo, stock }
-    setProductos((actuales) => [...actuales, nuevo])
+    if (!esProductoValido(nuevo)) return null
+    dispatch({ tipo: 'agregar_producto', producto: nuevo })
     return nuevo
   }
 
-  const cambiarStock = (id, cantidad) => {
-    setProductos((actuales) =>
-      actuales.map((p) => (p.id === id ? { ...p, stock: Math.max(0, p.stock + cantidad) } : p)),
-    )
+  const valor = {
+    productos,
+    carrito,
+    unidadesEnCarrito: carrito.reduce((total, item) => total + item.cantidad, 0),
+    agregarProducto,
+    eliminarProducto: (id) => dispatch({ tipo: 'eliminar_producto', id }),
+    cambiarStock: (id, cantidad) => dispatch({ tipo: 'cambiar_stock', id, cantidad }),
+    agregarAlCarrito: (id, cantidad) => dispatch({ tipo: 'agregar_al_carrito', id, cantidad }),
+    cambiarCantidadCarrito: (id, delta) => dispatch({ tipo: 'cambiar_cantidad_carrito', id, delta }),
+    quitarDelCarrito: (id) => dispatch({ tipo: 'quitar_del_carrito', id }),
   }
-
-  const eliminarProducto = (id) => {
-    setProductos((actuales) => actuales.filter((p) => p.id !== id))
-  }
-
-  const valor = { productos, agregarProducto, cambiarStock, eliminarProducto }
 
   return <InventarioContext.Provider value={valor}>{children}</InventarioContext.Provider>
 }

@@ -1,39 +1,16 @@
 import { useState } from 'react'
 import CampoFormulario from '../components/CampoFormulario.jsx'
+import useFormulario from '../hooks/useFormulario.js'
+import { validarContacto } from '../utils/validaciones.js'
 
 const formularioVacio = { nombre: '', correo: '', mensaje: '' }
 
-function validar(datos) {
-  const errores = {}
-  if (!datos.nombre.trim()) errores.nombre = 'Ingresa tu nombre.'
-  if (!datos.correo.trim()) errores.correo = 'Ingresa tu correo.'
-  else if (!/^\S+@\S+\.\S+$/.test(datos.correo)) errores.correo = 'El correo no tiene un formato válido.'
-  if (!datos.mensaje.trim()) errores.mensaje = 'Escribe tu mensaje.'
-  return errores
-}
-
-// Formulario controlado, igual que FormularioProducto
 function Contactanos() {
-  const [datos, setDatos] = useState(formularioVacio)
-  const [errores, setErrores] = useState({})
   const [enviado, setEnviado] = useState(false)
-
-  const cambiar = (e) => {
-    const { name, value } = e.target
-    setDatos({ ...datos, [name]: value })
-    setErrores({ ...errores, [name]: undefined })
-    setEnviado(false) // la confirmación se oculta al empezar un mensaje nuevo
-  }
-
-  const enviar = (e) => {
-    e.preventDefault()
-    const nuevosErrores = validar(datos)
-    setErrores(nuevosErrores)
-    if (Object.keys(nuevosErrores).length > 0) return
-
-    setEnviado(true)
-    setDatos(formularioVacio)
-  }
+  // Mismo hook que FormularioProducto; la confirmación se oculta al empezar un mensaje nuevo
+  const { valores, errores, cambiar, enviar } = useFormulario(formularioVacio, validarContacto, {
+    alCambiar: () => setEnviado(false),
+  })
 
   return (
     <section className="space-y-4">
@@ -45,12 +22,13 @@ function Contactanos() {
         <li><strong>Horario:</strong> Lunes a domingo, 8:00 a 22:00</li>
       </ul>
 
-      <form noValidate onSubmit={enviar} className="tarjeta grid max-w-md gap-4">
+      <form noValidate onSubmit={enviar(() => setEnviado(true))} className="tarjeta grid max-w-md gap-4">
         <CampoFormulario
           etiqueta="Nombre"
           id="contacto-nombre"
           name="nombre"
-          value={datos.nombre}
+          maxLength={60}
+          value={valores.nombre}
           onChange={cambiar}
           error={errores.nombre}
         />
@@ -59,7 +37,7 @@ function Contactanos() {
           id="contacto-correo"
           name="correo"
           type="email"
-          value={datos.correo}
+          value={valores.correo}
           onChange={cambiar}
           error={errores.correo}
         />
@@ -69,7 +47,7 @@ function Contactanos() {
             name="mensaje"
             rows="4"
             className="campo"
-            value={datos.mensaje}
+            value={valores.mensaje}
             onChange={cambiar}
           />
         </CampoFormulario>

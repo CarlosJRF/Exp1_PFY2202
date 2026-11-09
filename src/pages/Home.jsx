@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import useInventario from '../hooks/useInventario.js'
 import { STOCK_BAJO } from '../data/productos.js'
 

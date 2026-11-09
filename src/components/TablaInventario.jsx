@@ -1,8 +1,8 @@
 import FilaProducto from './FilaProducto.jsx'
 
-function TablaInventario({ productos, onCambiarStock, onEliminar }) {
+function TablaInventario({ productos, mensajeVacio, onCambiarStock, onEliminar }) {
   if (productos.length === 0) {
-    return <p className="tarjeta text-gray-600">No hay artículos en el inventario.</p>
+    return <p className="tarjeta text-gray-600">{mensajeVacio}</p>
   }
 
   return (
