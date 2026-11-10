@@ -8,7 +8,7 @@ Guía para trabajar en este repositorio (SuperInventario, asignatura PFY2202, Du
 
 Requisitos nuevos:
 
-1. **Filtro por categoría** en `/inventario`: un `<select>` con los tipos de producto. El filtro es estado propio de la página y la lista mostrada se **deriva** del inventario (`filter`), sin modificar los datos originales.
+1. **Filtro por categoría** en `/inventario`: un `<select>` con los tipos de producto. El filtro vive en la URL (`?tipo=Lácteos`, con `useSearchParams`) para conservarse al volver del detalle; la lista mostrada se **deriva** del inventario (`filter`), sin modificar los datos originales.
 2. **Detalle de artículo** (`/inventario/:id`): al hacer clic en un artículo de la lista se muestra su detalle y se puede **agregar al carrito** una cantidad; esa cantidad se **resta del stock** del inventario.
 3. **Carrito** (`/carrito`, enlace en el menú de la cabecera con contador): lista los artículos agregados; aumentar (+1) resta 1 del inventario, disminuir (−1) lo devuelve, "Quitar" devuelve todo. El −1 se desactiva en 1 y el +1 sin stock.
 4. Seguir usando **Tailwind CSS**.
@@ -35,6 +35,13 @@ Ya resueltas en entregas anteriores (mantener): Home separado en componentes, `L
 - `InventarioProvider` expone acciones con nombre (`agregarProducto`, `agregarAlCarrito`, etc.); los componentes usan `useInventario()`.
 - Persistencia y migraciones en `src/utils/almacenamiento.js`.
 
+## Convenciones de interfaz
+
+- Tablas con las clases compartidas `.tabla-contenedor` y `.tabla` (`index.css`); en celulares se ocultan columnas secundarias con `hidden sm:table-cell` y su dato se muestra bajo el nombre. Deben caber en 360 px sin desplazamiento horizontal.
+- Botones que no pueden actuar se desactivan (`disabled`); `.boton` ya trae el estilo desactivado.
+- Dentro de una fila clicable, enlaces y botones llaman a `stopPropagation` para no navegar dos veces.
+- Mensajes con cantidades usan `contar()` para singular/plural.
+
 ## Principios
 
 - **Mantenerlo simple**: apegarse a las instrucciones, sin dependencias ni funciones extra (no precios, pagos ni backend).
@@ -60,7 +67,8 @@ src/
 ├── data/productos.js           # Productos iniciales (UUID fijos), tipos, umbral stock bajo
 ├── utils/
 │   ├── validaciones.js         # Expresiones regulares y funciones validar*
-│   └── almacenamiento.js       # Clave versionada, carga segura y migración
+│   ├── almacenamiento.js       # Clave versionada, carga segura y migración
+│   └── texto.js                # contar(): singular/plural en los mensajes
 ├── context/
 │   ├── InventarioContext.js    # createContext
 │   ├── inventarioReducer.js    # Reducer de productos + carrito
@@ -70,7 +78,7 @@ src/
 │   └── useFormulario.js        # Valores, errores y envío de formularios
 ├── components/                 # Layout, Cabecera, MenuInferior, CampoFormulario,
 │                               # FormularioProducto, TablaInventario, FilaProducto,
-│                               # FiltroTipo, ModalConfirmacion, FilaCarrito
+│                               # FiltroTipo, ModalConfirmacion, TablaCarrito, FilaCarrito
 └── pages/                      # Home, AgregarArticulo, Inventario, DetalleArticulo,
                                 # Carrito, QuienesSomos, Contactanos, NoEncontrado
 ```

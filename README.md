@@ -43,12 +43,12 @@ src/
 ├── App.jsx                     # Definición de rutas
 ├── index.css                   # Tailwind CSS
 ├── data/productos.js           # Productos iniciales y tipos
-├── utils/                      # Validaciones y almacenamiento (funciones puras)
+├── utils/                      # Validaciones, almacenamiento y textos (funciones puras)
 ├── context/                    # Contexto, reducer y proveedor del estado global
 ├── hooks/                      # useInventario, useFormulario
 ├── components/                 # Layout, Cabecera, MenuInferior, CampoFormulario,
 │                               # FormularioProducto, TablaInventario, FilaProducto,
-│                               # FiltroTipo, ModalConfirmacion, FilaCarrito
+│                               # FiltroTipo, ModalConfirmacion, TablaCarrito, FilaCarrito
 └── pages/                      # Home, AgregarArticulo, Inventario, DetalleArticulo,
                                 # Carrito, QuienesSomos, Contactanos, NoEncontrado
 ```

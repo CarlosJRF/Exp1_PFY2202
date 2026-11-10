@@ -19,7 +19,35 @@ body {
   }
 
   .boton {
-    @apply cursor-pointer rounded bg-green-700 px-3 py-2 text-center text-white hover:bg-green-800;
+    @apply cursor-pointer rounded bg-green-700 px-3 py-2 text-center text-white hover:bg-green-800
+      disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  /* Tablas (inventario y carrito). overflow-x-auto en el contenedor evita que una tabla
+     ancha desborde la página en pantallas angostas. */
+  .tabla-contenedor {
+    @apply overflow-x-auto rounded-lg bg-white shadow;
+  }
+
+  .tabla {
+    @apply w-full text-left;
+  }
+
+  .tabla th {
+    @apply bg-green-800 px-2 py-2 text-white sm:px-3;
+  }
+
+  .tabla td {
+    @apply px-2 py-2 sm:px-3;
+  }
+
+  .tabla tbody tr {
+    @apply border-b border-gray-200;
+  }
+
+  /* Botones más compactos dentro de las tablas en celulares */
+  .tabla .boton {
+    @apply px-2 py-1 sm:px-3 sm:py-2;
   }
 
   .exito {

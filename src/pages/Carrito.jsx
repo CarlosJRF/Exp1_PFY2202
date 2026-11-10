@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
-import FilaCarrito from '../components/FilaCarrito.jsx'
+import TablaCarrito from '../components/TablaCarrito.jsx'
 import useInventario from '../hooks/useInventario.js'
+import { contar } from '../utils/texto.js'
 
 function Carrito() {
   const { productos, carrito, unidadesEnCarrito, cambiarCantidadCarrito, quitarDelCarrito } =
@@ -28,33 +29,16 @@ function Carrito() {
     <section className="space-y-4">
       <h2 className="titulo">Carrito</h2>
       <p>
-        {unidadesEnCarrito} unidades en {lineas.length} artículos. Cada cambio de cantidad se
-        descuenta o se devuelve al inventario.
+        {contar(unidadesEnCarrito, 'unidad', 'unidades')} en{' '}
+        {contar(lineas.length, 'artículo', 'artículos')}. Cada cambio de cantidad se descuenta o se
+        devuelve al inventario.
       </p>
 
-      <div className="overflow-x-auto rounded-lg bg-white shadow">
-        <table className="w-full text-left">
-          <thead className="bg-green-800 text-white">
-            <tr>
-              <th className="p-2">Artículo</th>
-              <th className="p-2">Cantidad</th>
-              <th className="p-2 text-right">Disponible</th>
-              <th className="p-2">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lineas.map((linea) => (
-              <FilaCarrito
-                key={linea.productoId}
-                producto={linea.producto}
-                cantidad={linea.cantidad}
-                onCambiarCantidad={cambiarCantidadCarrito}
-                onQuitar={quitarDelCarrito}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <TablaCarrito
+        lineas={lineas}
+        onCambiarCantidad={cambiarCantidadCarrito}
+        onQuitar={quitarDelCarrito}
+      />
 
       <p className="text-sm text-gray-600">
         “Quitar” devuelve todas las unidades de ese artículo al inventario.

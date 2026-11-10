@@ -1,14 +1,17 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useLocation, useParams } from 'react-router'
 import CampoFormulario from '../components/CampoFormulario.jsx'
 import useFormulario from '../hooks/useFormulario.js'
 import useInventario from '../hooks/useInventario.js'
 import { STOCK_BAJO } from '../data/productos.js'
+import { contar } from '../utils/texto.js'
 import { validarCantidad } from '../utils/validaciones.js'
 
 function DetalleArticulo() {
   const { id } = useParams() // el :id de la ruta /inventario/:id
   const { productos, carrito, agregarAlCarrito } = useInventario()
+  // Filtro con el que se venía del inventario (ver FilaProducto)
+  const volverA = `/inventario${useLocation().state?.filtro ?? ''}`
   const [agregado, setAgregado] = useState(null)
 
   const producto = productos.find((p) => p.id === id)
@@ -25,7 +28,7 @@ function DetalleArticulo() {
       <section className="tarjeta space-y-4 text-center">
         <h2 className="titulo">Artículo no encontrado</h2>
         <p>El artículo no existe o fue eliminado del inventario.</p>
-        <Link to="/inventario" className="boton inline-block">Volver al inventario</Link>
+        <Link to={volverA} className="boton inline-block">Volver al inventario</Link>
       </section>
     )
   }
@@ -37,7 +40,7 @@ function DetalleArticulo() {
 
   return (
     <section className="space-y-4">
-      <Link to="/inventario" className="text-sm text-green-800 underline">← Volver al inventario</Link>
+      <Link to={volverA} className="text-sm text-green-800 underline">← Volver al inventario</Link>
 
       <div className="tarjeta space-y-2">
         <h2 className="titulo">{producto.nombre}</h2>
@@ -48,10 +51,10 @@ function DetalleArticulo() {
           <dd>{producto.tipo}</dd>
           <dt className="font-medium">Disponible</dt>
           <dd className={producto.stock < STOCK_BAJO ? 'font-bold text-amber-600' : ''}>
-            {producto.stock} unidades
+            {contar(producto.stock, 'unidad', 'unidades')}
           </dd>
           <dt className="font-medium">En el carrito</dt>
-          <dd>{enCarrito} unidades</dd>
+          <dd>{contar(enCarrito, 'unidad', 'unidades')}</dd>
         </dl>
       </div>
 
@@ -77,7 +80,8 @@ function DetalleArticulo() {
 
       {agregado && (
         <p className="exito">
-          Se agregaron {agregado} unidades al carrito; quedan {producto.stock} en el inventario.{' '}
+          {agregado === 1 ? 'Se agregó 1 unidad' : `Se agregaron ${agregado} unidades`} al carrito; quedan{' '}
+          {producto.stock} en el inventario.{' '}
           <Link to="/carrito" className="underline">Ver carrito</Link>
         </p>
       )}

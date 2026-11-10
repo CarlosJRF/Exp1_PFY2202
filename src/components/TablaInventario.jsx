@@ -6,16 +6,16 @@ function TablaInventario({ productos, mensajeVacio, onCambiarStock, onEliminar }
   }
 
   return (
-    // overflow-x-auto permite desplazar la tabla en pantallas angostas
-    <div className="overflow-x-auto rounded-lg bg-white shadow">
-      <table className="w-full text-left">
-        <thead className="bg-green-800 text-white">
+    <div className="tabla-contenedor">
+      <table className="tabla">
+        <thead>
           <tr>
-            <th className="p-2">Nombre</th>
-            <th className="p-2">Marca</th>
-            <th className="p-2">Tipo</th>
-            <th className="p-2 text-right">Stock</th>
-            <th className="p-2">Acciones</th>
+            <th>Nombre</th>
+            {/* hidden sm:table-cell: columna oculta en celulares, visible desde 640 px */}
+            <th className="hidden sm:table-cell">Marca</th>
+            <th className="hidden sm:table-cell">Tipo</th>
+            <th className="text-right">Stock</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>

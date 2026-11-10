@@ -1,4 +1,5 @@
 import { TIPOS_PRODUCTO } from '../data/productos.js'
+import { contar } from './texto.js'
 
 // \p{L} = cualquier letra (incluye tildes y ñ); la bandera "u" activa estas clases Unicode.
 // Nombre: 2 a 60 caracteres; letras, números, espacios y . , % - / ( )
@@ -74,7 +75,7 @@ export function validarCantidad(datos, stockDisponible) {
     return { cantidad: 'La cantidad debe ser un número entero mayor que 0.' }
   }
   if (cantidad > stockDisponible) {
-    return { cantidad: `Solo hay ${stockDisponible} unidades disponibles.` }
+    return { cantidad: `Solo hay ${contar(stockDisponible, 'unidad disponible', 'unidades disponibles')}.` }
   }
   return {}
 }

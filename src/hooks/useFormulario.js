@@ -14,12 +14,13 @@ function useFormulario(valoresIniciales, validar, { alCambiar } = {}) {
   }
 
   // Uso: <form onSubmit={enviar((valores) => ...)}>
+  // Si alEnviar devuelve false (la acción falló), el formulario conserva lo escrito.
   const enviar = (alEnviar) => (e) => {
     e.preventDefault()
     const nuevosErrores = validar(valores)
     setErrores(nuevosErrores)
     if (Object.keys(nuevosErrores).length > 0) return
-    alEnviar(valores)
+    if (alEnviar(valores) === false) return
     setValores(valoresIniciales)
   }
 

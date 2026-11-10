@@ -10,6 +10,7 @@ function FormularioProducto({ onAgregar, onEditar }) {
     alCambiar: onEditar,
   })
 
+  // Se devuelve el resultado de onAgregar: false mantiene lo escrito en el formulario
   const agregar = (datos) =>
     onAgregar({
       nombre: datos.nombre.trim(),
